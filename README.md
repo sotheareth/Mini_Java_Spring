@@ -57,6 +57,42 @@ public class Person implements Comparable<Person>, Comparator<Person> {
 	}
 
 }
-
-
 ````
+
+# To create custom annotation
+```code
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Redundancy {
+
+	 boolean value() default true;
+}
+```
+
+#To use on class and method
+
+```code
+@Redundancy
+public class A {
+	....
+}
+```
+
+#To excute annotation in aop
+create pointcut on package classes
+
+```code
+@Aspect
+public class RundancyExecution {
+
+	@Pointcut("execution(* com.bizmob.api.service.*.*(..))")
+	private void anyServiceMethod() {}
+
+	//pointcut get from above
+	@Before(pointcut = "anyServiceMethod", )
+  	public void doAccessCheck() {
+   	 // ...
+  	}
+}
+```
